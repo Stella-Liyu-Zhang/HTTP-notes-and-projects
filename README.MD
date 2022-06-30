@@ -170,6 +170,7 @@ Get JSON server up and running
 Try to do the following to your JSON server using only your Postman application
 
 - Make an HTTP request that retrieves all records
+
 - Make an HTTP request that receives just one of those records
 - Make an HTTP request that updates one of those records
 - Make an HTTP request that creates a brand new record
@@ -177,22 +178,27 @@ Try to do the following to your JSON server using only your Postman application
 
 > What is this pattern called? Why might this pattern be useful? (write this down in your notes somewhere)
 
-
 > Scavenger hunt time. Find as many headers as you can in the wild using your DevTools and random websites
 
-If you come across a header that you know and understand, write down what you think it is and its purpose
-
-If you come across a header that you’re unfamiliar with, look up what its purpose is and write that down in your notes
-
-> Notes: Postman is an HTML Client.
-
-Network tab is really important!
 
 1) All the headers are shown from the GET request, as we could see from below:
+
+I made a GET request on Thomas's Twitter main page. Here are several headers:
 ![Get request ](./imgs/GEThttprequest.png)
 
-**Reflection**: While 
 
+> If you come across a header that you know and understand, write down what you think it is and its purpose
+
+> If you come across a header that you’re unfamiliar with, look up what its purpose is and write that down in your notes
+
+## Notes: 
+> Postman is an HTML Client.
+
+> Network tab in inspect is really important tool to use for reference.
+
+2) 
+
+**Reflection**: I had several 
 
 
 <br />
