@@ -8,6 +8,13 @@ The content of the notes was derived from the **CSE 135** course slides taught b
 Modzilla, [Postman Learning doc](https://learning.postman.com/docs/sending-requests/requests/), YouTube Channel of Valentin Despa, codebubb, 
 
 For questions I came across, I also consulted my mentor *Camdyn Rasque*.
+
+## Category
+- [Notes on HTTP](#http-basics)
+  - [HTTP Status Codes](#http-status-codes)
+  - [HTTP Request Practices](#http-requests)
+- [Notes on JSON Server](JsonServerRequest.md)
+
 ## HTTP Basics
 ### HTTP (Hyper Text Transfer Protocol)
 
@@ -98,12 +105,18 @@ Ask for resources by URL, and here we will proceed by:
 > - PATCH: update some existing data fields
 
 For example, if you're working with an API for a To Do list application, you might use a **GET** method to retrieve the current list of tasks, a **POST** method to create a new task, and a **PUT** or **PATCH** method to edit an existing task.
-### Difference between PUT and POST request:
+### The **difference** between PUT and POST:
 
 The HTTP PUT request method creates a new resource or replaces a representation of the target resource with the request payload.
 
-The  **difference** between PUT and POST is that PUT is idempotent: calling it once or several times successively has the same effect (that is no side effect), whereas successive identical POST requests may have additional effects, akin to placing an order several times.
 
+PUT is idempotent: calling it once or several times successively has the same effect (that is no side effect), whereas successive identical POST requests may have additional effects, akin to placing an order several times.
+
+### The **difference** between PATCH and PUT
+
+PUT is a method of modifying resource where the client sends data that updates the entire resource. 
+
+PATCH is a method of modifying resources where the client sends partial data that is to be updated without modifying the entire data.Sep 13, 2021
 HTTP Header Fields
 ![HTTP Header fields](./imgs/httpheaderfields.png)
 
