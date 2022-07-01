@@ -5,7 +5,7 @@ Some review on HTTP by Stella Zhang | 6/28/2022
 The content of the notes was derived from the **CSE 135** course slides taught by *Professor Thomas Powell* at UC San Diego CSE Department. 
 
 **Other References:**  
-Modzilla, YouTube Channel of Valentin Despa, codebubb, 
+Modzilla, [Postman Learning doc](https://learning.postman.com/docs/sending-requests/requests/), YouTube Channel of Valentin Despa, codebubb, 
 
 For questions I came across, I also consulted my mentor *Camdyn Rasque*.
 ## HTTP Basics
@@ -95,6 +95,14 @@ Ask for resources by URL, and here we will proceed by:
 > - POST: Submit data to the server
 > - PUT: Update data already on the server
 > - DELETE: Deletes data from the server
+> - PATCH: update some existing data fields
+
+For example, if you're working with an API for a To Do list application, you might use a **GET** method to retrieve the current list of tasks, a **POST** method to create a new task, and a **PUT** or **PATCH** method to edit an existing task.
+### Difference between PUT and POST request:
+
+The HTTP PUT request method creates a new resource or replaces a representation of the target resource with the request payload.
+
+The  **difference** between PUT and POST is that PUT is idempotent: calling it once or several times successively has the same effect (that is no side effect), whereas successive identical POST requests may have additional effects, akin to placing an order several times.
 
 HTTP Header Fields
 ![HTTP Header fields](./imgs/httpheaderfields.png)
@@ -183,25 +191,64 @@ Try to do the following to your JSON server using only your Postman application
 > If you come across a header that you know and understand, write down what you think it is and its purpose
 
 > If you come across a header that you’re unfamiliar with, look up what its purpose is and write that down in your notes.
+## Brief view and Purpose of the practice projects:
+Postman is an HTML client. 
+
+We can send requests in Postman to connect to APIs that we are working with. 
+
+> Our requests can retrieve, add, delete, and update data. Whether we are building or testing our own API, or integrating with a third-party API, we can send our requests in Postman. 
+
+> Our requests can send parameters, authorization details, and any body data we require.
+
+#### For instance, if you're building a client application (such as a mobile or web app) for a store, you might send a request to retrieve the list of available products, another request to create a new order (including the selected product details), and a different request to log a customer in to their account.
+
+> When we send a request, Postman displays the response received from the API server in a way that lets you examine, visualize, and if necessary troubleshoot it.
+
+
 
 ## Make an HTTP Request that Retrieves all the records:
-### GET all the headers from a Twitter link
+### GET all the headers from Thomas's Twitter Page
 HTTP headers let the client and the server pass additional information with an HTTP request or response. An HTTP header consists of its case-insensitive name followed by a colon (:), then by its value. Whitespace before the value is ignored.
 
 For instance, I made a GET request on Thomas's Twitter main page. Here are several headers:
+
 ![Get request ](./imgs/GEThttprequest.png)
 
+**What actually happened during the process?**
+
+In this example, Postman is acting as the client application and is communicating with an API server. Here's what happened when you selected Send:
+
+- Postman sent a GET request to the Postman Echo API server located at postman-echo.com.
+- The API server received the request, processed it, and returned a response to Postman.
+- Postman received the response and displayed it in the Response pane.
+
+![postman api requests](./imgs/postman%20api%20request.jpg)
+
+
+## Make an HTTP requests with details that I need
+We can specify the details you need for your request.
+![Send an http requests with parameters specified](./imgs/httprequestwithpara.png)
+
 ## Made a POST request to JSON server to create some brand new records:
+You will need to send body data with requests whenever you need to add or update structured data. For example, if you're sending a request to add a new customer to a database, you might include the customer details in JSON. Typically you will use body data with PUT, POST, and PATCH requests.
+
+The Body tab in Postman allows you to specify the data you need to send with a request. You can send various different types of body data to suit your API.
+
+
 
 ![post request](./imgs/Annotation%202022-06-30%20163034.png)
 
 ## Make an HTTP request that receives just one of those records
+We can specify the details you need for your request.
+
+![Record with params specified](./imgs/record%20with%20params%20specified.png)
+![Record without params specified](/imgs/record%20without%20any%20params.png)
 
 ## Make an HTTP request that updates one of those records
-The HTTP PUT request method creates a new resource or replaces a representation of the target resource with the request payload.
 
-The  **difference** between PUT and POST is that PUT is idempotent: calling it once or several times successively has the same effect (that is no side effect), whereas successive identical POST requests may have additional effects, akin to placing an order several times.
 
+PATCH — update some existing data fields
+PUT - 
 
 
 ## Make an HTTP request that deletes one of those records
@@ -217,8 +264,10 @@ Howvever, I'm also receiving an error " TypeError: Cannot read properties of und
 
 > Network tab in inspect is really important tool to use for reference.
 
-> 
-2) 
+> If you're building an API, the URL will typically be the base location plus path. 
+- For example, in the request https://postman-echo.com/get, https://postman-echo.com is the base URL, and /get is the endpoint path.
+- If you're using a third-party API, your API provider will supply the URLs you need, for example within their developer documentation.
+
 
 **Reflection**: I had several 
 
