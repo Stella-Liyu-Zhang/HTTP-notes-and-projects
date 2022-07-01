@@ -5,6 +5,7 @@ Some review on HTTP by Stella Zhang | 6/28/2022
 The content of the notes was derived from the **CSE 135** course slides taught by *Professor Thomas Powell* at UC San Diego CSE Department. 
 
 **Other References:**  
+Modzilla, YouTube Channel of Valentin Despa, codebubb, 
 
 For questions I came across, I also consulted my mentor *Camdyn Rasque*.
 ## HTTP Basics
@@ -170,7 +171,6 @@ Get JSON server up and running
 Try to do the following to your JSON server using only your Postman application
 
 - Make an HTTP request that retrieves all records
-
 - Make an HTTP request that receives just one of those records
 - Make an HTTP request that updates one of those records
 - Make an HTTP request that creates a brand new record
@@ -180,22 +180,44 @@ Try to do the following to your JSON server using only your Postman application
 
 > Scavenger hunt time. Find as many headers as you can in the wild using your DevTools and random websites
 
-
-1) All the headers are shown from the GET request, as we could see from below:
-
-I made a GET request on Thomas's Twitter main page. Here are several headers:
-![Get request ](./imgs/GEThttprequest.png)
-
-
 > If you come across a header that you know and understand, write down what you think it is and its purpose
 
-> If you come across a header that you’re unfamiliar with, look up what its purpose is and write that down in your notes
+> If you come across a header that you’re unfamiliar with, look up what its purpose is and write that down in your notes.
+
+## Make an HTTP Request that Retrieves all the records:
+### GET all the headers from a Twitter link
+HTTP headers let the client and the server pass additional information with an HTTP request or response. An HTTP header consists of its case-insensitive name followed by a colon (:), then by its value. Whitespace before the value is ignored.
+
+For instance, I made a GET request on Thomas's Twitter main page. Here are several headers:
+![Get request ](./imgs/GEThttprequest.png)
+
+## Made a POST request to JSON server to create some brand new records:
+
+![post request](./imgs/Annotation%202022-06-30%20163034.png)
+
+## Make an HTTP request that receives just one of those records
+
+## Make an HTTP request that updates one of those records
+The HTTP PUT request method creates a new resource or replaces a representation of the target resource with the request payload.
+
+The  **difference** between PUT and POST is that PUT is idempotent: calling it once or several times successively has the same effect (that is no side effect), whereas successive identical POST requests may have additional effects, akin to placing an order several times.
+
+
+
+## Make an HTTP request that deletes one of those records
+On reqres.in:
+![reqres](./imgs/reqres.in.png)
+When we sent the delete request to  https://reqres.in/api/users/2/, we will receive a status code of 204 No Content as a test result that is supposed to be:
+![Delete request](./imgs/deleterequest.png)
+Howvever, I'm also receiving an error " TypeError: Cannot read properties of undefined (reading 'includes')"
+
 
 ## Notes: 
 > Postman is an HTML Client.
 
 > Network tab in inspect is really important tool to use for reference.
 
+> 
 2) 
 
 **Reflection**: I had several 
