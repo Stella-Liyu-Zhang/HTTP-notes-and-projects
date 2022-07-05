@@ -127,13 +127,17 @@ HTTP Header Fields
 > - 4xx: Client Error: Request does not have what it needs
 > - 5xx: Server Error: Server failed to fulfill an apparent valid request
 
-> - 200 -OK
+> - 200 -OK, in response to a successful request 
 > - 201 - ok CREATED
+> - 206 - Partial Content
+    <br/>
+> If an application requests only a range of the requested file, the 206 code is returned. It's most commonly used with download managers that can stop and resume a download, or split the download into pieces.
 > - 301 - Moved to new URL
 > - 304 - Not modified (Cached version)
 > - 400 - Bad Request
 > - 401 - Unauthorized
-> - 404 - Not found
+> - 403 - Forbidden 
+> - 404 - Not found 
 > - 500 - Internal server error
 
 ### HTTP/2
@@ -141,28 +145,21 @@ Respond with more data; Reduce latency by enabling full request and response mul
 ![http2operations](./imgs/http2.png)
 
 ## The Law of Three Redux
+
 - Consider the form of HTTP Requests and responses, there are three pieces to each
 - As a server-side program you understand you can only get data from the three pieces of request (so consider thosse your input and watch them carefully)
 - Furthermore you can only output via the three pieces of the response (mostly the message body)
 - This is it, there is nothing more to the bedrock of the web transmit wise (save addressing statefulness)
 
 ## A closer Look at the Request Line
+The first line of the HTTP request is called the request line and consists of three parts:
 
+> 1) The "method" indicates what kind of request this is. The most common methods are GET, POST, and HEAD.
 
-Consist of three major parts:
+> 2) The "path" is generally the part of the URL that comes after the host (domain). For example, when requesting "https://code.tutsplus.com/tutorials/top-20-mysql-best-practices--net-7855" , the path portion is "/tutorials/top-20-mysql-best-practices--net-7855".
 
-The Request Method followed by a space
+> 3) The protocol part contains HTTP and the version, which is usually 1.1 in modern browsers.
 
-Methods in HTTP 1.1 include: GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE and CONNECT
-- GET, POST, and HEAD are the most common
-- Extension methods such as those specified by WebDav (RFC 2518)
-
-The request URI followed by a space
-- The URL associated with the resource to be fetched or acted upon
-
-- The HTTP Version followed by the CRLF
-
-GET Y* Y Fetch data from the specfied URI. Data mayb e passed via a query string GET requests shall only retrieve data, not change state. Naybe used in an HTNL fom,
 ## Jargon time!
 
 An HTTP method is considered safe if it doesn't change the state of the endpoint (Server, app, etc.)
@@ -170,8 +167,9 @@ An HTTP method is considered safe if it doesn't change the state of the endpoint
 
 An HTTP method is considered **indempotent** if it can be repeated with the same effect and the server stays in the same state
 - GET would be indempotent but other less obvious methods like DELETE are idempotent because once deleted something can be repeat, DELETE and nothing really changes.
-- A POST o nthe other hand would be not indempotent because something is created each line.
+- A POST on the other hand would be not indempotent because something is created each line.
 - SAFE methods are idempotent ,but idempotent methods don't have to be safe.
+
 ## Making a simple HTTP request
 - Use a command line tool like "curl" to make a request
 > curl https://ucsd.edu I more
@@ -281,12 +279,98 @@ Howvever, I'm also receiving an error " TypeError: Cannot read properties of und
 - For example, in the request https://postman-echo.com/get, https://postman-echo.com is the base URL, and /get is the endpoint path.
 - If you're using a third-party API, your API provider will supply the URLs you need, for example within their developer documentation.
 
+## Request Methods Review
+The three most commonly used request methods are GET, POST, and HEAD. 
+
+### GET:Retrieve a Document
+GET is the main method used for retrieving HTML, images, JavaScript, CSS, etc. Most data that loads in your browser was requested using this method.
+
+For instance, once the HTML loads, the browser will start sending GET requests for images that may look like this:
+
+> GET /wp-content/themes/tuts_theme/images/header_bg_tall.png HTTP/1.1
+
+Web forms can be set to use the GET method. Here's an example.
+
+> 
+```HTML
+<form method="GET" action="foo.php">
+ 
+First Name: <input type="text" name="first_name" /> <br />
+Last Name: <input type="text" name="last_name" /> <br />
+ 
+<input type="submit" name="action" value="Submit" />
+ 
+</form>
+```
+And when that form is submitted, the HTTP request begins like this: 
+
+> GET /foo.php?first_name=John&last_name=Doe&action=Submit HTTP/1.1
+
+We can see that each form input was added to the query string. Here, query strings are the first_name=John, last_name=Doe, things like those.
+
+### POST: Send Data to the Server
+POST requests are most commonly sent by web forms. Here is an example: 
+
+```HTML
+<form method="POST" action="foo.php">
+ 
+First Name: <input type="text" name="first_name" /> <br />
+Last Name: <input type="text" name="last_name" /> <br />
+ 
+<input type="submit" name="action" value="Submit" />
+ 
+</form>
+```
+Submitting that form creates an HTTP request like this:
+
+```HTTP
+POST /foo.php HTTP/1.1
+Host: localhost
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET CLR 3.5.30729)
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-us,en;q=0.5
+Accept-Encoding: gzip,deflate
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+Keep-Alive: 300
+Connection: keep-alive
+Referer: http://localhost/test.php
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 43
+ 
+first_name=John&last_name=Doe&action=Submit
+```
+**3 things to Note:**
+1) The path in the first line is simply /foo.php, and there is no query string anymore.
+2) Content-Type and Content-Length headers have been added, which provide information about the data being sent. 
+3) All the data is now sent after the headers, with teh same format as the query string.
+
+POST method requests can also be made via AJAX, applications, cURL, etc.
+And all file upload forms are required to use the POST method.
+
+### HEAD: Retrieve Header Information
+> HEAD is identical to GET, except the server does not return the content in the HTTP response. When you send a HEAD request, it means that you are only interested in the response code and the HTTP headers, not the document itself.
+
+> With this method, the browser can check if a document has been modified, for caching purposes. It can also check if the document exists at all.
+
+> For example, if you have a lot of links on your website, you can periodically send HEAD requests to all of them to check for broken links. This will work much faster than using GET.
+
+## HTTP Response Structure
+After the browser send the HTTP request, the server responds with an HTTP response. Excluding the content, it looks like this:
+
+![Http Response structure](/imgs/httpresponsestructure.png)
+
+- Protocol is again usually HTTP/1.x or HTTP/1.1 on modern servers.
+- The next part is the status code, followed by a short message. 
+  - Code 200 means that our GET request was successful and the server will return the contents of the requested document, right after the headers.
+  - We've all seen 404 pages. This number actually comes from the status code part of the HTTP response. If a GET request is made for a path that the server cannot find, it will respond with a 404 instead of 200.
+- The rest of the response contains headers just like the HTTP request. These values can contain information about the server software, when the page/file was last modified, the MIME type, etc...
+
+
 
 **Reflection**: I had several 
 
 
 <br />
-
 
 
 
