@@ -132,7 +132,8 @@ HTTP Header Fields
 > - 206 - Partial Content
     <br/>
 > If an application requests only a range of the requested file, the 206 code is returned. It's most commonly used with download managers that can stop and resume a download, or split the download into pieces.
-> - 301 - Moved to new URL
+> - 301 - Moved to new URL permanently
+> - 302 Moved temporarily
 > - 304 - Not modified (Cached version)
 > - 400 - Bad Request
 > - 401 - Unauthorized
@@ -366,11 +367,134 @@ After the browser send the HTTP request, the server responds with an HTTP respon
 - The rest of the response contains headers just like the HTTP request. These values can contain information about the server software, when the page/file was last modified, the MIME type, etc...
 
 
+## HTTP Headers in HTTP Requests:
+We can use the getallheaders() function to retrieve all headers at once.
+### Host
+An HTTP request is sent to a specific IP address. But since most servers are capable of hosting multiple websites under the same IP, they must know which domain name the browser is looking for.
+
+> Host: code.tutsplus.com
+
+This is basically the host name, including the domain and the subdomain.
+
+### User-Agent
+ 
+> User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET CLR 3.5.30729)
+
+This header can carry several pieces of information, such as:
+- browser name and version
+- operating system name and version
+- default language
+
+This is how websites can collect certain general information about their surfers' systems. For example, they can detect if the surfer is using a cellphone browser and redirect them to a mobile version of their website which works better on smaller screens.
 
 **Reflection**: I had several 
 
+### Accept-Langauge
+> Accept-Language: en-us,en;q=0.5
+
+This header displays the default language setting of the user. If a website has different language versions, it can redirect a new surfer based on this data.
+
+It can carry multiple languages, separated by commas. The first one is the preferred language, and each other listed language can carry a "q" value, which is an estimate of the user's preference for the language (min. 0 max. 1).
+
+### Accept-Encoding
+> Accept-Encoding: gzip,deflate
+
+Most modern browsers support gzip and will send this in the header. The web server then can send the HTML output in a compressed format. This can reduce the size by up to 80% to save bandwidth and time.
+
+### If-Modified-Since
+If a web document is already cached in your browser, and you visit it again, your browser can check if the document has been updated by sending this:
+
+> If-Modified-Since: Sat, 28 June 2022 06:38:19 PST 
+
+If it was not modified since that date, the server will send a "304 Not Modified" response code, and no content—and the browser will load the content from the cache.
+
+### Cookie As the name suggests, this sends the cookies stored in your browser for that domain.
+> Cookie: PHPSESSID=r2t5uvjq435r4q7ib3vtdjq120; foo=bar
+
+These are name=value pairs separated by semicolons. Cookies can also contain the session id.
+
+### Referer
+As the name sugguests, this HTTP header contains the referring URL
+
+For example, if I visit the Envato Tuts + Code homepage and click on an article link, this header is sent to my browser:
+
+> Referer: https://code.tutsplus.com/
+
+### Authorization 
+When a web page asks for authorization, the browser opens a login window. When you enter a username and password in this window, the browser sends another HTTP request, but this time it contains this header.
+> Authorization: Basic bXl1c2VyOm15cGFzcw==
+
+**Note:** The data inside the header is base64 encoded. For example, base64_decode('bXl1c2VyOm15cGFzcw==') would return 'myuser:mypass'.
+
+## HTTP Headers in HTTP Responses:
+
+### Cache-Control 
+> The Cache-Control general-header field is used to specify directives which MUST be obeyed by all caching mechanisms along the request/response chain.
+For example:
+ 
+### Content-Type
+This header indicates the "MIME type" of the document. 
+
+The browser then decides how to interpret the contents based on this. For example, an HTML page:
+> Content-Type: text/html; charset=UTF-8
+If it's a GIF image, this may be sent:
+> Content-Type: image/gif
+
+The browser can decide to use an external application or browser extension based on the MIME type. For example, this will cause Adobe Reader or the browser's built-in PDF reader to be loaded:
+> Content-Type: application/pdf
+
+### Content-Disposition
+This header instructs the browser to open a file download box, instead of trying to parse the content. For example:
+>   Content-Disposition: attachment; filename="download.zip"
+
+### Content-Length
+When content is going to be transmitted to the browser, the server can indicate its size (in bytes) using this header.
+>   Content-Length: 89123
+
+This is especially useful for file downloads. That's how the browser can determine the progress of the download.
+
+### Etag
+This is another header that is used for caching purposes. It looks like this:
+
+> Etag: "pub1259380237;gz"
+
+The web server may send this header with every document it serves. The value can be based on the last modify date, the file size, or even the checksum value of a file. The browser then saves this value as it caches the document. The next time the browser requests the same file, it sends this in the HTTP request:
+
+> If-None-Match: "pub1259380237;gz"
+
+If the Etag value of the document matches that, the server will send a 304 code instead of 200, and no content. The browser will load the contents from its cache.
+
+### Last-Modified 
+It offers another way for the browser to cache a document. The browser may send this in the HTTP request:
+
+> If-Modified-Since: Sat, 28 Nov 2009 06:38:19 GMT
+
+### Location 
+This header is used for redirections. If the response code is 301 or 302, the server must also send this header. For example, when you go to https://net.tutsplus.com, your browser will receive this:
+
+```
+HTTP/1.x 301 Moved Permanently
+...
+Location: https://code.tutsplus.com/
+...
+```
+
+### Set-Cookie
+When a website wants to set or update a cookie in your browser, it will use this header.
+> Set-Cookie: skin=noskin; path=/; domain=.amazon.com; expires=Sun, 29-Nov-2022 21:42:28 GMT
+
+> Set-Cookie: session-id=120-7333518-8165026; path=/; domain=.amazon.com; expires=Sat Feb 27 08:00:00 2010 GMT
+
+Each cookie is sent as a separate header. Note that cookies set via JavaScript do not go through HTTP headers.
+
+### WWW-Authenticate
+A website may send this header to authenticate a user through HTTP. When the browser sees this header, it will open up a login dialogue window.
+> WWW-Authenticate: Basic realm="Restricted Area"
+
+### Content-Encoding
+This header is usually set when the returned content is compressed.
+> Content-Encoding: gzipS
 
 <br />
-
 
 
