@@ -130,6 +130,7 @@ PATCH /comments/1 200 22.214 ms - 79
 ## 5) DELETE Request
 If we send DELETE request to https://localhost:3000/comments/1 , we see that in comment section, the piece of data with "id==1" is deleted.
 ```JSON
+
 "comments": [
     {
       "title": "foo",
